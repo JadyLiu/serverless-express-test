@@ -1,9 +1,10 @@
-const dynamoose = require('dynamoose');
-const config = require('config');
-const Schema = dynamoose.Schema;
-const AWS = require('aws-sdk');
+var dynamoose = require('dynamoose');
+var config = require('config');
+var Schema = dynamoose.Schema;
 
-dynamoose.AWS.config.update({region: config.Defaults.AWS.Dynamo.Region});
+dynamoose.AWS.config.update({
+  region: config.Defaults.AWS.Dynamo.Region
+});
 
 var accountSchema = new Schema({
   accountName: {
@@ -66,7 +67,6 @@ var accountSchema = new Schema({
   }
 });
 
-
 var Account = dynamoose.model(config.Defaults.AWS.Dynamo.Table, accountSchema);
-
+console.log(Schema);
 module.exports = Account;

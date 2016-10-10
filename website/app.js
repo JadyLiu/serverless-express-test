@@ -18,11 +18,47 @@ app.get('/', (req, res) => {
 })
 
 app.get('/users', (req, res) => {
-//    res.json(users)
+//
+    var account = new myAccounts();
+    if(typeof req.accountName != 'undefined')
+      account.accountName = req.accountName;
+
+    if(typeof req.accountNumber != 'undefined')
+      account.accountNumber = req.accountNumber;
+
+    if(typeof req.roleArn != 'undefined')
+      account.roleArn = req.roleArn;
+
+    if(typeof req.accessKey != 'undefined')
+      account.accessKey = req.accessKey;
+
+    if(typeof req.accessSecret != 'undefined')
+      account.accessSecret = req.accessSecret;
+
+    if(typeof req.choice != 'undefined')
+      account.choice = req.choice;
+
+    account.save(function(err){
+      if(!err){
+        console.log("Model/accounts : POST /api/accounts | Account "+account.accountName+"("+account.accountNumber+")"+" save operation successful");
+        // scheduler.scheduleSingle(account);
+        reply(account).code(201);
+        console.log(account);
+      }
+      else {
+        console.log("Model/accounts : POST /api/accounts | Account "+account.accountName+"("+account.accountNumber+")"+" save operation failed | "+err.toString());
+      }
+    });
+//
+
+    console.log("account details");
+
+
     Fetcher.fetchStatsFor = function(account){
+      console.log("Fetch1");
       auth.getSupport(account,function(err,support){
         if(!err){
-          logger.info("Successfully got support object for "+account.accountName+"("+account.accountNumber+")");
+          console.log("Successfully got support object for "+account.accountName+"("+account.accountNumber+")");
           var params = {
             language: config.Defaults.AWS.Support.Language
           };
@@ -36,13 +72,13 @@ app.get('/users', (req, res) => {
             }
             else {
               //update last refreshed
-              logger.info("Successfully got checks for "+account.accountName+"("+account.accountNumber+")");
+              console.log("Successfully got checks for "+account.accountName+"("+account.accountNumber+")");
               var currentDate = new Date();
               account.lastRefreshed = currentDate;
               account.lastRefreshStatus = "success";
               account.save(function(err){
                 if(!err){
-                  logger.info("Successfully saved lastRefreshed stats for "+account.accountName+"("+account.accountNumber+")");
+                  console.log("Successfully saved lastRefreshed stats for "+account.accountName+"("+account.accountNumber+")");
                   client.set(account.accountNumber+'_checks', JSON.stringify(data));
                   var checkIds = [];
                   data.checks.forEach(function(check){
@@ -56,7 +92,7 @@ app.get('/users', (req, res) => {
                         logger.error("Failed to get check results ("+check.id+") for "+account.accountName+"("+account.accountNumber+")");
                       }
                       else {
-                        logger.info("Successfully retrieved check results ("+check.id+") for "+account.accountName+"("+account.accountNumber+")");
+                        console.log("Successfully retrieved check results ("+check.id+") for "+account.accountName+"("+account.accountNumber+")");
                         client.set(account.accountNumber+'_result_'+check.id,JSON.stringify(data));
                       }
                     });
@@ -66,10 +102,10 @@ app.get('/users', (req, res) => {
                   };
                   support.describeTrustedAdvisorCheckSummaries(params, function(err, data) {
                     if (err){
-                      logger.error("Failed to get check summaries for "+account.accountName+"("+account.accountNumber+")");
+                      console.log("Failed to get check summaries for "+account.accountName+"("+account.accountNumber+")");
                     }
                     else {
-                      logger.info("Successfully retrieved check summaries for "+account.accountName+"("+account.accountNumber+")");
+                      console.log("Successfully retrieved check summaries for "+account.accountName+"("+account.accountNumber+")");
                       client.set(account.accountNumber+'_summaries', JSON.stringify(data));
                     }
                   });

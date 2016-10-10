@@ -1,9 +1,9 @@
-const Fetcher = {};
+var Fetcher = {};
 const aws = require('aws-sdk');
 const config = require('config');
 const redis = require("redis");
 const async = require('async');
-const auth = require('./lib/auth');
+const auth = require('../lib/auth');
 const _ = require('lodash');
 const myAccounts = require('../models/accounts');
 
@@ -14,6 +14,7 @@ client.on("error", function (err) {
 });
 
 Fetcher.fetchStatsFor = function(account){
+  console.log("fetchStateFor");
   console.log("Lib/Fetcher | Starting to fetch TA stats for "+ account.accountName +"(" +account.accountNumber+ ")");
   auth.getSupport(account,function(err,support){
     if(!err){
@@ -264,7 +265,7 @@ Fetcher.getStatusCountsForAccount = function(account,callback){
     }
   });
 }
-######## This is the first #########
+
 Fetcher.getStatusCountsForAll = function(callback){
   myAccounts.scan({},function(err,accounts){
     if(!err){
