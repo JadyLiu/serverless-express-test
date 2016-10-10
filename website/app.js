@@ -3,6 +3,9 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware')
+const AWS = require('aws-sdk');
+const myAccounts = require('./models/accounts');
+const Fetcher = require('./lib/fetcher');
 const app = express()
 
 app.use(cors())
@@ -11,11 +14,84 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 app.get('/', (req, res) => {
-    res.sendFile(`${__dirname}/index.html`)
+    res.sendFile(`${__dirname}/views/index.html`)
 })
 
 app.get('/users', (req, res) => {
-    res.json(users)
+//    res.json(users)
+    Fetcher.fetchStatsFor = function(account){
+      auth.getSupport(account,function(err,support){
+        if(!err){
+          logger.info("Successfully got support object for "+account.accountName+"("+account.accountNumber+")");
+          var params = {
+            language: config.Defaults.AWS.Support.Language
+          };
+          support.describeTrustedAdvisorChecks(params, function(err, data) {
+            if (err) {
+              logger.error("Failed to get checks for "+account.accountName+"("+account.accountNumber+")")
+              var currentDate = new Date();
+              account.lastRefreshed = currentDate;
+              account.lastRefreshStatus = "failed";
+              account.save();
+            }
+            else {
+              //update last refreshed
+              logger.info("Successfully got checks for "+account.accountName+"("+account.accountNumber+")");
+              var currentDate = new Date();
+              account.lastRefreshed = currentDate;
+              account.lastRefreshStatus = "success";
+              account.save(function(err){
+                if(!err){
+                  logger.info("Successfully saved lastRefreshed stats for "+account.accountName+"("+account.accountNumber+")");
+                  client.set(account.accountNumber+'_checks', JSON.stringify(data));
+                  var checkIds = [];
+                  data.checks.forEach(function(check){
+                    checkIds.push(check.id);
+                    var params = {
+                      checkId:check.id,
+                      language:config.Defaults.AWS.Support.Language
+                    };
+                    support.describeTrustedAdvisorCheckResult(params, function(err, data) {
+                      if (err) {
+                        logger.error("Failed to get check results ("+check.id+") for "+account.accountName+"("+account.accountNumber+")");
+                      }
+                      else {
+                        logger.info("Successfully retrieved check results ("+check.id+") for "+account.accountName+"("+account.accountNumber+")");
+                        client.set(account.accountNumber+'_result_'+check.id,JSON.stringify(data));
+                      }
+                    });
+                  });
+                  var params = {
+                    checkIds : checkIds
+                  };
+                  support.describeTrustedAdvisorCheckSummaries(params, function(err, data) {
+                    if (err){
+                      logger.error("Failed to get check summaries for "+account.accountName+"("+account.accountNumber+")");
+                    }
+                    else {
+                      logger.info("Successfully retrieved check summaries for "+account.accountName+"("+account.accountNumber+")");
+                      client.set(account.accountNumber+'_summaries', JSON.stringify(data));
+                    }
+                  });
+                }
+                else {
+                  logger.error("Failed to save lastRefreshed stats for "+account.accountName+"("+account.accountNumber+")")
+                }
+              });
+
+            }
+          });
+        }
+        else {
+          //failed to get auth object
+          logger.error("Failed to get support object for "+account.accountName+"("+account.accountNumber+")");
+          var currentDate = new Date();
+          account.lastRefreshed = currentDate;
+          account.lastRefreshStatus = "failed";
+          account.save();
+        }
+      });
+    }
 })
 
 app.get('/users/:userId', (req, res) => {
@@ -68,7 +144,7 @@ let userIdCounter = users.length
 
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
-// app.listen(3000)
+app.listen(3000)
 
 // Export your express server so you can import it in the lambda function.
 module.exports = app

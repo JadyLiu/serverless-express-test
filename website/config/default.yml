@@ -1,0 +1,11 @@
+Scheduler:
+  CronPattern: '00 00 */1 * * *'
+
+Defaults:
+  AWS:
+    Support:
+      Region: us-east-1
+      Language: en
+    Dynamo:
+      Table: consigliere
+      Region: ap-southeast-2
