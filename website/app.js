@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 app.get('/', (req, res) => {
-    res.sendFile(`${__dirname}/index.html`)
+    res.sendFile(`${__dirname}/views/index.html`)
 })
 
 app.get('/users', (req, res) => {
@@ -68,7 +68,7 @@ let userIdCounter = users.length
 
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
-// app.listen(3000)
+ app.listen(3000)
 
 // Export your express server so you can import it in the lambda function.
 module.exports = app
