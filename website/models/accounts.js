@@ -1,5 +1,5 @@
-var dynamoose = require('dynamoose');
-var config = require('config');
+const dynamoose = require('dynamoose');
+const config = require('config');
 var Schema = dynamoose.Schema;
 
 dynamoose.AWS.config.update({
@@ -68,5 +68,5 @@ var accountSchema = new Schema({
 });
 
 var Account = dynamoose.model(config.Defaults.AWS.Dynamo.Table, accountSchema);
-console.log(Schema);
+
 module.exports = Account;

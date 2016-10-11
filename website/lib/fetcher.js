@@ -13,8 +13,9 @@ client.on("error", function (err) {
     console.log("DataStore/Redis | Error on redis connection | "+ err.toString());
 });
 
+
 Fetcher.fetchStatsFor = function(account){
-  console.log("fetchStateFor");
+
   console.log("Lib/Fetcher | Starting to fetch TA stats for "+ account.accountName +"(" +account.accountNumber+ ")");
   auth.getSupport(account,function(err,support){
     if(!err){
