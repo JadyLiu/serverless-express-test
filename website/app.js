@@ -1,14 +1,17 @@
 'use strict'
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
+const path = require('path');
+const nodemailer = require('nodemailer');
 const awsServerlessExpressMiddleware = require('aws-serverless-express/middleware');
 const AWS = require('aws-sdk');
-const myAccounts = require('./models/accounts');
-const Fetcher = require('./lib/fetcher');
-const scheduler = require('./lib/scheduler');
-const app = express();
+const cors = require('cors');
 const winston = require('winston');
+
+// const myAccounts = require('./models/accounts');
+// const Fetcher = require('./lib/fetcher');
+// const scheduler = require('./lib/scheduler');
+const app = express();
 
 var logger = new (winston.Logger)({
   transports: [
@@ -16,47 +19,39 @@ var logger = new (winston.Logger)({
       new (winston.transports.File)({'timestamp':true,filename:'/var/log/consigliere/consigliere.log'})
     ]
 });
+app.set('views',path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(awsServerlessExpressMiddleware.eventContext())
 
-scheduler.loadFromDatabase();
+// scheduler.loadFromDatabase();
 
 app.get('/', (req, res) => {
-    res.sendFile(`${__dirname}/views/index.html`)
-})
+    res.render('index', {title: 'Welcome'});
+});
 
 app.get('/TextGreen', (req, res) => {
+    res.render('textgreen');
+      // myAccounts.scan({},function(err,accounts){
+      //   if(!err){
+      //     logger.info("View/index : Rendering index");
+      //     // res.render('index',{accounts: accounts});
+      //     res.sendStatus(200);
+      //     res.send(req.accounts);
+      //   }
+      //   else {
+      //     logger.error("Model/accounts : Accounts Scan operation failed "+err.toString());
+      //   }
+      // });
 
-      myAccounts.scan({},function(err,accounts){
-        if(!err){
-          logger.info("View/index : Rendering index");
-          // res.render('index',{accounts: accounts});
-          res.sendStatus(200);
-          res.send(req.accounts);
-        }
-        else {
-          logger.error("Model/accounts : Accounts Scan operation failed "+err.toString());
-        }
-      });
+});
 
-})
+app.get('/about', (req, res) => {
 
-app.get('/WeatherGreen', (req, res) => {
-
-      myAccounts.scan({},function(err,accounts){
-        if(!err){
-          logger.info("View/index : Rendering index");
-          // res.render('index',{accounts: accounts});
-          res.sendStatus(200);
-          res.send(req.accounts);
-        }
-        else {
-          logger.error("Model/accounts : Accounts Scan operation failed "+err.toString());
-        }
-      });
 
 })
 
@@ -110,8 +105,8 @@ let userIdCounter = users.length
 
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
- app.listen(3000)
-
+app.listen(3000)
+console.log('Server is running locally on port 3000 ...');
 
 // Export your express server so you can import it in the lambda function.
 module.exports = app
