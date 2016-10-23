@@ -4,9 +4,9 @@
   "description": "Example application for running a Node Express app on AWS Lambda using Amazon API Gateway.",
   "main": "lambda.js",
   "config": {
-    "s3BucketName": "YOUR_UNIQUE_BUCKET_NAME",
+    "s3BucketName": "serverless-express",
     "cloudFormationStackName": "AwsServerlessExpressStack",
-    "region": "YOUR_AWS_REGION"
+    "region": "ap-southeast-2"
   },
   "scripts": {
     "config": "node configure.js",
@@ -14,7 +14,7 @@
     "invoke-lambda": "aws lambda invoke --function-name AwsServerlessExpressFunction --region $npm_package_config_region --payload file://api-gateway-event.json lambda-invoke-response.json && cat lambda-invoke-response.json",
     "create-bucket": "aws s3 mb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
     "delete-bucket": "aws s3 rm s3://$npm_package_config_s3BucketName/lambda-function.zip --region $npm_package_config_region; aws s3 rm s3://$npm_package_config_s3BucketName/simple-proxy-api.yaml --region $npm_package_config_region; aws s3 rb s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
-    "package-function": "zip -q -r lambda-function.zip lambda.js app.js index.html node_modules",
+    "package-function": "zip -q -r lambda-function.zip lambda.js app.js components node_modules config public views",
     "upload-lambda-function-package": "aws s3 cp ./lambda-function.zip s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
     "upload-api-gateway-swagger": "aws s3 cp ./simple-proxy-api.yaml s3://$npm_package_config_s3BucketName --region $npm_package_config_region",
     "create-stack": "aws cloudformation create-stack --stack-name $npm_package_config_cloudFormationStackName --template-body file://./cloudformation.json --capabilities CAPABILITY_IAM --parameters ParameterKey=AwsServerlessExpressS3Bucket,ParameterValue=$npm_package_config_s3BucketName --region $npm_package_config_region && open https://console.aws.amazon.com/cloudformation/home?region=$npm_package_config_region",
@@ -42,6 +42,7 @@
     "winston": "^2.2.0",
     "js-yaml": "^3.6.1",
     "config": "^1.21.0",
+    "mixin": "*",
     "dynamoose": "^0.6.0"
   }
 }

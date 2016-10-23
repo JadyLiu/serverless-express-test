@@ -8,17 +8,16 @@ const AWS = require('aws-sdk');
 const cors = require('cors');
 const winston = require('winston');
 
-// const myAccounts = require('./models/accounts');
-// const Fetcher = require('./lib/fetcher');
-// const scheduler = require('./lib/scheduler');
 const app = express();
 
 var logger = new (winston.Logger)({
   transports: [
       new (winston.transports.Console)({'timestamp':true}),
-      new (winston.transports.File)({'timestamp':true,filename:'/var/log/consigliere/consigliere.log'})
+      new (winston.transports.File)({'timestamp':true,filename:'/var/log/atcloud/atcloud.log'})
     ]
 });
+
+app.set('port', process.env.PORT || 3000)
 app.set('views',path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
@@ -28,32 +27,54 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(awsServerlessExpressMiddleware.eventContext())
 
-// scheduler.loadFromDatabase();
-
 app.get('/', (req, res) => {
-    res.render('index', {title: 'Welcome'});
+    res.render('index');
 });
 
-app.get('/TextGreen', (req, res) => {
-    res.render('textgreen');
-      // myAccounts.scan({},function(err,accounts){
-      //   if(!err){
-      //     logger.info("View/index : Rendering index");
-      //     // res.render('index',{accounts: accounts});
-      //     res.sendStatus(200);
-      //     res.send(req.accounts);
-      //   }
-      //   else {
-      //     logger.error("Model/accounts : Accounts Scan operation failed "+err.toString());
-      //   }
-      // });
-
+app.get('/tech', (req, res) => {
+    res.render('tech');
 });
 
-app.get('/about', (req, res) => {
+app.get('/blog', (req, res) => {
+    res.render('blog');
+});
 
+app.get('/textme', (req, res) => {
+    res.render('textme');
+});
 
+app.get('/aboutme', (req, res) => {
+    res.render('aboutme');
 })
+
+app.post('/contact/send', function(req, res){
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth:{
+            user: 'jadyliu@gmail.com',
+            pass: ''
+        }
+    });
+
+    var mailOptions = {
+        from: 'Jady Liu <jadyliu@gmail.com>',
+        to: 'jadyliu@gmail.com',
+        subject: 'Website Contact Form',
+        text: 'You have submitted the following details.... Name: ' +req.body.name+ 'Email: ' +req.body.email+ 'Message: ' +req.body.message, 
+        html: '<p>You have a submission with the following details...</p><ul><li>Name: '+req.body.name+'</li><li>Email: '+req.body.email+'</li><li>Message: '+req.body.message+'</li></ul>'
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+        if(error){
+            console.log(error);
+            res.redirect('/');
+        } else {
+            console.log('Message Sent: '+info.response);
+            res.redirect('/');
+        }
+    });
+})
+
 
 app.get('/users/:userId', (req, res) => {
     const user = getUser(req.params.userId)
@@ -106,7 +127,11 @@ let userIdCounter = users.length
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
 app.listen(3000)
-console.log('Server is running locally on port 3000 ...');
+// var server = http.createServer(app)
+// reload(server, app)
+// server.listen(app.get('port'), function(){
+//   console.log("Web server listening on port " + app.get('port'));
+// });
 
 // Export your express server so you can import it in the lambda function.
 module.exports = app
