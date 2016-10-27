@@ -14,7 +14,7 @@ html(lang="en")
     title= title
     block styles
       link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css")
-      link(href="stylesheets/carousel.css", rel="stylesheet")
+      link(href="../stylesheets/carousel.css", rel="stylesheet")
   body(data-spy="scroll",data-target=".scrollspy")
       
     block body
@@ -33,16 +33,16 @@ html(lang="en")
               #navbar.navbar-collapse.collapse
                 ul.nav.navbar-nav
                   li
-                    a(href="/tech") Tech
+                    a(href="/#{stage}/tech") Tech
                   li
-                    a(href="/blog") Blog
+                    a(href="/#{stage}/blog") Blog
                   li.dropdown
                     a.dropdown-toggle(href='', data-toggle='dropdown', role='button', aria-expanded='false')
                       | My Alexa Project 
                       span.caret
                     ul.dropdown-menu(role='menu')
                       li
-                        a(href='/textme') TextMe
+                        a(href='/#{stage}/textme') TextMe
                       li
                         a(href='#') WeatherMe
                       li
@@ -52,7 +52,7 @@ html(lang="en")
                       li
                         a(href='#') WineMe
                   li
-                    a(href="/aboutme") About Me
+                    a(href="/#{stage}/aboutme") About Me
 
 
         .container

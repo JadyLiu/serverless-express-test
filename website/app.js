@@ -17,6 +17,8 @@ var logger = new (winston.Logger)({
     ]
 });
 
+//var stage = 'prod';
+
 app.set('port', process.env.PORT || 3000)
 app.set('views',path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,23 +30,33 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(awsServerlessExpressMiddleware.eventContext())
 
 app.get('/', (req, res) => {
-    res.render('index');
+    res.render('index',{
+    stage: requestContext(req.apiGateway.event.requestContext.stage)
+  });
 });
 
-app.get('/tech', (req, res) => {
-    res.render('tech');
+app.get('/*/tech', (req, res) => {
+    res.render('tech' ,{
+    stage: requestContext(req.apiGateway.event.requestContext.stage)
+  });
 });
 
-app.get('/blog', (req, res) => {
-    res.render('blog');
+app.get('/*/blog', (req, res) => {
+    res.render('blog',{
+    stage: requestContext(req.apiGateway.event.requestContext.stage)
+  });
 });
 
-app.get('/textme', (req, res) => {
-    res.render('textme');
+app.get('/*/textme', (req, res) => {
+    res.render('textme', {
+    stage: requestContext(req.apiGateway.event.requestContext.stage)
+  });
 });
 
-app.get('/aboutme', (req, res) => {
-    res.render('aboutme');
+app.get('/*/aboutme', (req, res) => {
+    res.render('aboutme', {
+    stage: requestContext(req.apiGateway.event.requestContext.stage)
+  });
 })
 
 app.post('/contact/send', function(req, res){
@@ -54,7 +66,7 @@ app.post('/contact/send', function(req, res){
             user: 'jadyliu@gmail.com',
             pass: ''
         }
-    });
+    })
 
     var mailOptions = {
         from: 'Jady Liu <jadyliu@gmail.com>',
@@ -126,7 +138,7 @@ let userIdCounter = users.length
 
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
-app.listen(3000)
+// app.listen(3000)
 // var server = http.createServer(app)
 // reload(server, app)
 // server.listen(app.get('port'), function(){
