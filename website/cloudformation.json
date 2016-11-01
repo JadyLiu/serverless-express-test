@@ -24,7 +24,7 @@
         "ApiGatewayApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-                "Description": "AWS Serverless Express API",
+                "Description": "AWS Serverless Express API new",
                 "BodyS3Location": {
                     "Bucket": {
                         "Ref": "AwsServerlessExpressS3Bucket"
