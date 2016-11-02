@@ -3,7 +3,7 @@ menu:
   Home: /
   Cloud: /cloud
   IoT: /iot
-  Archives: /archives
+  TechKnowledgy: /techknowledgy
   Contact: /contact
 rss: /atom.xml
 
@@ -15,10 +15,8 @@ fancybox: true
 sidebar: left
 widgets:
 - category
-- tag
-- tagcloud
-- archive
 - recent_posts
+- tagcloud
 
 # display widgets at the bottom of index pages (pagination == 2)
 index_widgets:

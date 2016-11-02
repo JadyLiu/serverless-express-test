@@ -46,8 +46,11 @@ highlight:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  serverless: serverless
+  Cloud: cloud
+  IoT: iot
+  TechKnowledgy: TechKnowledgy
 tag_map:
+  alexa
 
 
 # Date / Time format
