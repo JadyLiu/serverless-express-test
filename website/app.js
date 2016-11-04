@@ -17,45 +17,48 @@ var logger = new (winston.Logger)({
     ]
 });
 
-//var stage = 'prod';
-
 app.set('port', process.env.PORT || 3000)
 app.set('views',path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(cors())
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(awsServerlessExpressMiddleware.eventContext());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(awsServerlessExpressMiddleware.eventContext())
 
 app.get('/', (req, res) => {
     res.render('index',{
-    stage: requestContext(req.apiGateway.event.requestContext.stage)
+    //stage: 'prod'
+    stage: req.apiGateway.event.requestContext.stage
   });
 });
 
 app.get('/*/tech', (req, res) => {
     res.render('tech' ,{
-    stage: requestContext(req.apiGateway.event.requestContext.stage)
+    //stage: 'prod'
+    stage: req.apiGateway.event.requestContext.stage
   });
 });
 
 app.get('/*/blog', (req, res) => {
     res.render('blog',{
-    stage: requestContext(req.apiGateway.event.requestContext.stage)
+    //stage: 'prod'
+    stage: req.apiGateway.event.requestContext.stage
   });
 });
 
 app.get('/*/textme', (req, res) => {
     res.render('textme', {
-    stage: requestContext(req.apiGateway.event.requestContext.stage)
+    //stage: 'prod'
+    stage: req.apiGateway.event.requestContext.stage
   });
 });
 
 app.get('/*/aboutme', (req, res) => {
     res.render('aboutme', {
-    stage: requestContext(req.apiGateway.event.requestContext.stage)
+    //stage: 'prod'    
+    stage: req.apiGateway.event.requestContext.stage
   });
 })
 

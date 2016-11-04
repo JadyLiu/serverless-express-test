@@ -4,7 +4,7 @@
     "Parameters": {
         "AwsServerlessExpressS3Bucket": {
             "Type": "String",
-            "Description": "The S3 bucket in which the lambda function code is stored. Bucket names are region-unique, so you must change this."
+            "Description": "This S3 bucket in which the lambda function code is stored. Bucket names are region-unique, so you must change this."
         },
         "LambdaFunctionS3Key": {
             "Type": "String",
@@ -24,7 +24,7 @@
         "ApiGatewayApi": {
             "Type": "AWS::ApiGateway::RestApi",
             "Properties": {
-                "Description": "AWS Serverless Express API new",
+                "Description": "AWS Serverless Express API",
                 "BodyS3Location": {
                     "Bucket": {
                         "Ref": "AwsServerlessExpressS3Bucket"
