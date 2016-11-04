@@ -32,30 +32,31 @@ app.get('/', (req, res) => {
     //stage: 'prod'
     stage: req.apiGateway.event.requestContext.stage
   });
+console.log('stage is '+ stage);
 });
 
-app.get('/*/tech', (req, res) => {
+app.get('/tech', (req, res) => {
     res.render('tech' ,{
     //stage: 'prod'
     stage: req.apiGateway.event.requestContext.stage
   });
 });
 
-app.get('/*/blog', (req, res) => {
+app.get('/blog', (req, res) => {
     res.render('blog',{
     //stage: 'prod'
     stage: req.apiGateway.event.requestContext.stage
   });
 });
 
-app.get('/*/textme', (req, res) => {
+app.get('/prod/textme', (req, res) => {
     res.render('textme', {
     //stage: 'prod'
     stage: req.apiGateway.event.requestContext.stage
   });
 });
 
-app.get('/*/aboutme', (req, res) => {
+app.get('/aboutme', (req, res) => {
     res.render('aboutme', {
     //stage: 'prod'    
     stage: req.apiGateway.event.requestContext.stage
