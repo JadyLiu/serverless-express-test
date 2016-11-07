@@ -4,6 +4,7 @@ date: 2016-10-27 17:52:57
 ---
 Contact me for questions, comments, suggestions, or to request a topic for a post.
 
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.16/require.js"></script>
 <script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
 <script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
@@ -14,7 +15,8 @@ Contact me for questions, comments, suggestions, or to request a topic for a pos
 <script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
 <script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
 <script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
-<script type="text/javascript" src="apigClient.js"></script>
+<script type="text/javascript" src="apigClient.js"></script> 
+-->
 
 <form class="form" id="contactform">
     <fieldset class="field">
@@ -41,7 +43,7 @@ Contact me for questions, comments, suggestions, or to request a topic for a pos
   function sendmessage(){
       //var apigClientFactory = require('hexo-api-gateway-client')
 
-      var config = { invokeUrl:'https://ydof20cshi.execute-api.ap-southeast-2.amazonaws.com/prod' }
+      // var config = { invokeUrl:'https://ydof20cshi.execute-api.ap-southeast-2.amazonaws.com/prod' }
       var apigClient = apigClientFactory.newClient();
       var msg = document.getElementById('messageint').value;
       var emailaddress = document.getElementById('emailaddr').value;
