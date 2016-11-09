@@ -49,7 +49,7 @@ app.get('/blog', (req, res) => {
   });
 });
 
-app.get('/prod/textme', (req, res) => {
+app.get('/textme', (req, res) => {
     res.render('textme', {
     //stage: 'prod'
     stage: req.apiGateway.event.requestContext.stage
@@ -63,7 +63,7 @@ app.get('/aboutme', (req, res) => {
   });
 })
 
-app.post('/contact/send', function(req, res){
+app.post('/contact-us', function(req, res){
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth:{
@@ -142,7 +142,7 @@ let userIdCounter = users.length
 
 // The aws-serverless-express library creates a server and listens on a Unix
 // Domain Socket for you, so you can remove the usual call to app.listen.
-// app.listen(3000)
+app.listen(3000)
 // var server = http.createServer(app)
 // reload(server, app)
 // server.listen(app.get('port'), function(){
