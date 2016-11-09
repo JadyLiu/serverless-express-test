@@ -3,7 +3,7 @@ title: contact
 date: 2016-10-27 17:52:57
 ---
 Contact me for questions, comments, suggestions, or to request a topic for a post.
-<!-- <style type="stylesheet" src="contact.css"></style> -->
+<style type="stylesheet" src="contact.css"></style>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
@@ -38,11 +38,12 @@ Contact me for questions, comments, suggestions, or to request a topic for a pos
     </fieldset>
 </form>
 
+<div id="message" ></div>
+
 <script type="text/javascript">
   $(document).ready(function() {
-
     $("#contactform").submit(function(e) {
-        e.preventDefault();
+        e.preventDefault();  
         var msg = document.getElementById('message').value;
         var emailaddress = document.getElementById('emailaddr').value;
         var data = {
@@ -52,12 +53,14 @@ Contact me for questions, comments, suggestions, or to request a topic for a pos
         $.ajax({
             type: 'POST',
             crossDomain: true,
-            url: '',
+            url: 'https://ydof20cshi.execute-api.ap-southeast-2.amazonaws.com/prod/contact-us',
             contentType: 'application/json',
             data: JSON.stringify(data),
             dataType: 'json',
-            success: function (data) {
-                console.log(data);
+            success: function (response) {
+              alert(response);
+                $("#message").html(response);
+                $('#message').show();
             },
             error: function (e) {
                 console.log('error');
