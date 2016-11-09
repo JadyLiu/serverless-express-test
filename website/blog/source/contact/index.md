@@ -52,7 +52,7 @@ Contact me for questions, comments, suggestions, or to request a topic for a pos
         $.ajax({
             type: 'POST',
             crossDomain: true,
-            url: 'https://ydof20cshi.execute-api.ap-southeast-2.amazonaws.com/prod/contact-us',
+            url: '',
             contentType: 'application/json',
             data: JSON.stringify(data),
             dataType: 'json',
