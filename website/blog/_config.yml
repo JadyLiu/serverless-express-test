@@ -7,7 +7,7 @@ title: AtCloud.Me Blog
 subtitle: DevOps/Automation/IoT
 description: Blog for all new technology
 author: Jady Liu
-language:
+language: default
 timezone: Australia/Sydney
 
 # URL
@@ -71,7 +71,7 @@ pagination_dir: page
 
 # Extensions
 ## Plugins: https://hexo.io/plugins/
-plugins: hexo-api-gateway-client
+#plugins: hexo-api-gateway-client
 ## Themes: https://hexo.io/themes/
 theme: landscape
 
