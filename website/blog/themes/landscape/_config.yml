@@ -1,8 +1,7 @@
 # Header
 menu:
   Home: /
-  Cloud: /cloud
-  IoT: /iot
+  Articles: /archives
   TechKnowledgy: /techknowledgy
   Contact: /contact
 rss: /atom.xml
